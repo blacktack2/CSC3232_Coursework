@@ -5,7 +5,7 @@ using UnityEngine;
 public class ForceReceiver : MonoBehaviour
 {
     [SerializeField]
-    private Rigidbody2D rigidbodyReceiver;
+    private Rigidbody2D m_rigidbody2D;
     [SerializeField]
     private float threshold = 0.0f;
 
@@ -13,7 +13,7 @@ public class ForceReceiver : MonoBehaviour
     {
         if (force.magnitude >= threshold)
         {
-            rigidbodyReceiver.AddForce(force);
+            m_rigidbody2D.AddForce(force);
             return true;
         }
         return false;

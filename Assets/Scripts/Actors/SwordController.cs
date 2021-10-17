@@ -6,6 +6,16 @@ public class SwordController : MonoBehaviour
 {
     [SerializeField]
     private Collider2D attackCollider;
+    [SerializeField]
+    private Renderer attackRenderer;
+
+    [SerializeField]
+    private Transform followPoint;
+    [SerializeField]
+    private Renderer followRenderer;
+
+    [SerializeField]
+    private float repeatDelay = 0.4f;
 
     [SerializeField]
     private float swingDelay = 0.1f;
@@ -16,10 +26,14 @@ public class SwordController : MonoBehaviour
     private bool isSwinging = false;
 
     private float swingTime = 0.0f;
+    private float sinceLastSwing = 0.0f;
 
-    void Start()
+    void Awake()
     {
-        
+        attackCollider.enabled = false;
+        attackRenderer.enabled = false;
+
+        followRenderer.enabled = true;
     }
 
     void Update()
@@ -30,6 +44,7 @@ public class SwordController : MonoBehaviour
 
     void FixedUpdate()
     {
+        sinceLastSwing += Time.fixedDeltaTime;
         if (isSwinging)
         {
             swingTime += Time.fixedDeltaTime;
@@ -37,6 +52,8 @@ public class SwordController : MonoBehaviour
             {
                 isSwinging = false;
                 attackCollider.enabled = false;
+                attackRenderer.enabled = false;
+                followRenderer.enabled = true;
             }
             else if (swingTime > swingDelay)
             {
@@ -47,8 +64,14 @@ public class SwordController : MonoBehaviour
         if (doSwing)
         {
             doSwing = false;
-            isSwinging = true;
-            swingTime = 0.0f;
+            if (!isSwinging && sinceLastSwing > repeatDelay)
+            {
+                sinceLastSwing = 0.0f;
+                isSwinging = true;
+                swingTime = 0.0f;
+                followRenderer.enabled = false;
+                attackRenderer.enabled = true;
+            }
         }
     }
 }

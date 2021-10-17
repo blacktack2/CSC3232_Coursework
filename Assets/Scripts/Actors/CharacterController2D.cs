@@ -37,6 +37,7 @@ public class CharacterController2D : MonoBehaviour
 	[Header("Events")]
 	[Space]
 
+	public UnityEvent OnJumpEvent;
 	public UnityEvent OnLandEvent;
 
 	[System.Serializable]
@@ -49,6 +50,8 @@ public class CharacterController2D : MonoBehaviour
 	{
 		m_Rigidbody2D = GetComponent<Rigidbody2D>();
 
+		if (OnJumpEvent == null)
+			OnJumpEvent = new UnityEvent();
 		if (OnLandEvent == null)
 			OnLandEvent = new UnityEvent();
 
@@ -60,21 +63,9 @@ public class CharacterController2D : MonoBehaviour
 	{
         lastJump += Time.fixedDeltaTime;
 		bool wasGrounded = m_Grounded;
-		m_Grounded = false;
-
-		// The player is grounded if a circlecast to the groundcheck position hits anything designated as ground
-		// This can be done using layers instead but Sample Assets will not overwrite your project settings.
-		// Collider2D[] colliders = Physics2D.OverlapCircleAll(m_GroundCheck.position, k_GroundedRadius, m_WhatIsGround);
-		// for (int i = 0; i < colliders.Length; i++)
-		// {
-		// 	if (colliders[i].gameObject != gameObject)
-		// 	{
-		// 		m_Grounded = true;
-		// 		if (!wasGrounded)
-		// 			OnLandEvent.Invoke();
-		// 	}
-		// }
         m_Grounded = m_GroundCheck.IsTriggered();
+		if (m_Grounded && ! wasGrounded)
+			OnLandEvent.Invoke();
 	}
 
 	public void Move(float move, bool crouch, bool jump)
@@ -144,6 +135,7 @@ public class CharacterController2D : MonoBehaviour
             lastJump = 0.0f;
 			m_Grounded = false;
 			m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce));
+			OnJumpEvent.Invoke();
 		}
 	}
 
@@ -156,5 +148,10 @@ public class CharacterController2D : MonoBehaviour
 		Vector3 theScale = transform.localScale;
 		theScale.x *= -1;
 		transform.localScale = theScale;
+	}
+
+	public bool IsGrounded()
+	{
+		return m_Grounded;
 	}
 }
