@@ -18,7 +18,7 @@ public class AttackController : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        ForceReceiver receiver = other.GetComponent<ForceReceiver>();
+        ForceReceiver receiver = other.GetComponentInParent<ForceReceiver>();
         if (receiver != null)
         {
             receiver.ApplyForce(attackForce * director.localScale);
