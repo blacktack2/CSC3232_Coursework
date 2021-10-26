@@ -29,7 +29,6 @@ public class ForceReceiver : MonoBehaviour
         }
 
         float force = impulse / Time.fixedDeltaTime;
-        Debug.Log(gameObject.name + " " + force);
         ForceApplied(force);
     }
 
