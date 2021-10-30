@@ -1,19 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(ForceReceiver))]
 public class FragileObject : MonoBehaviour
 {
-    [SerializeField]
-    private Rigidbody2D m_rigidbody2d;
-    [SerializeField]
-    private float breakingForce = 1.0f;
-    [SerializeField]
-    private bool isFragile = true;
+    [SerializeField][Tooltip("Force required to break this object if is fragile.")]
+    private float _BreakingForce = 1.0f;
+    [SerializeField][Tooltip("True if this object should be destroyed when receiving a force greater than the breaking force.")]
+    private bool _IsFragile = true;
 
     public void ForceApplied(float magnitude)
     {
-        if (isFragile && magnitude >= breakingForce)
+        if (_IsFragile && magnitude >= _BreakingForce)
             Destroy(gameObject);
     }
 }

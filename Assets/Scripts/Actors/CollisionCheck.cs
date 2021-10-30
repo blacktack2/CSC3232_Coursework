@@ -1,15 +1,13 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CollisionCheck : MonoBehaviour
 {
-    [SerializeField]
-    private LayerMask whatIsGround;
+    [SerializeField][Tooltip("Layers of which objects should trigger this collision check.")]
+    private LayerMask _WhatIsGround;
 
-    public List<Collider2D> triggerObjects = new List<Collider2D>();
+    public readonly List<Collider2D> triggerObjects = new List<Collider2D>();
 
-    // Start is called before the first frame update
     void Start()
     {
         
@@ -17,7 +15,7 @@ public class CollisionCheck : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (1 << other.gameObject.layer == whatIsGround.value)
+        if (1 << other.gameObject.layer == _WhatIsGround.value)
             triggerObjects.Add(other);
     }
 

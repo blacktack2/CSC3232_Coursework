@@ -1,23 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ForceReceiver : MonoBehaviour
 {
-    [SerializeField]
-    private Rigidbody2D m_rigidbody2D;
-    [SerializeField]
-    private FragileObject fragileObject;
+    [SerializeField][Tooltip("Rigidbody force is being applied to.")]
+    private Rigidbody2D _Rigidbody2D;
+    [SerializeField][Tooltip("Call force operations on the fragile object (if present) whenever a force is applied.")]
+    private FragileObject _FragileObject;
 
-    [SerializeField]
-    private bool isStatic = false;
-    [SerializeField]
-    private float staticBreakForce = 0.0f;
+    [SerializeField][Tooltip("Start this object as immobile until a force greater than or equal to the static break force is received.")]
+    private bool _IsStatic = false;
+    [SerializeField][Tooltip("Minimum force required to disable static mode if applicable.")]
+    private float _StaticBreakForce = 0.0f;
 
     void Awake()
     {
-        if (isStatic)
-            m_rigidbody2D.isKinematic = true;
+        if (_IsStatic)
+            _Rigidbody2D.isKinematic = true;
     }
 
     void OnCollisionEnter2D(Collision2D other)
@@ -34,22 +32,22 @@ public class ForceReceiver : MonoBehaviour
 
     public void ApplyForce(Vector2 force)
     {
-        if (!isStatic || force.magnitude >= staticBreakForce)
+        if (!_IsStatic || force.magnitude >= _StaticBreakForce)
         {
-            m_rigidbody2D.AddForce(force);
+            _Rigidbody2D.AddForce(force);
             ForceApplied(force.magnitude);
         }
     }
 
     private void ForceApplied(float magnitude)
     {
-        if (fragileObject != null)
-            fragileObject.ForceApplied(magnitude);
+        if (_FragileObject != null)
+            _FragileObject.ForceApplied(magnitude);
 
-        if (!isStatic || magnitude >= staticBreakForce)
+        if (!_IsStatic || magnitude >= _StaticBreakForce)
         {
-            isStatic = false;
-            m_rigidbody2D.isKinematic = false;
+            _IsStatic = false;
+            _Rigidbody2D.isKinematic = false;
         }
     }
 }

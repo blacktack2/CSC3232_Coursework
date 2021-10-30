@@ -1,52 +1,50 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SwordWielder : MonoBehaviour
 {
-    [SerializeField]
-    private SwordController[] ownedSwords;
-    [SerializeField]
-    private int mainWeapon = 0;
-    [SerializeField]
-    private int altWeapon = 1;
+    [SerializeField][Tooltip("List of swords this wielder owns.")]
+    private SwordController[] _OwnedSwords;
+    [SerializeField][Tooltip("Index of the owned sword to be set as the main weapon.")]
+    private int _MainWeaponIndex = 0;
+    [SerializeField][Tooltip("Index of the owned sword to be set as the alternate weapon")]
+    private int _AltWeaponIndex = 1;
 
-    [SerializeField]
-    private Transform swordFollowPoint;
-    [SerializeField]
-    private Transform swordAttackPoint;
+    [SerializeField][Tooltip("Transform to set the follow point for each owned sword to.")]
+    private Transform _SwordFollowPoint;
+    [SerializeField][Tooltip("Transform to set the attack point for each owned sword to.")]
+    private Transform _SwordAttackPoint;
 
     void Awake()
     {
-        foreach (SwordController sword in ownedSwords)
+        foreach (SwordController sword in _OwnedSwords)
         {
             if (sword != null)
             {
-                sword.SetWeilder(this, swordFollowPoint, swordAttackPoint);
+                sword.SetWeilder(this, _SwordFollowPoint, _SwordAttackPoint);
                 sword.gameObject.SetActive(false);
             }
         }
-        if (ownedSwords[mainWeapon] != null)
-            ownedSwords[mainWeapon].gameObject.SetActive(true);
-        if (ownedSwords[altWeapon] != null)
-            ownedSwords[altWeapon].gameObject.SetActive(true);
+        if (_OwnedSwords[_MainWeaponIndex] != null)
+            _OwnedSwords[_MainWeaponIndex].gameObject.SetActive(true);
+        if (_OwnedSwords[_AltWeaponIndex] != null)
+            _OwnedSwords[_AltWeaponIndex].gameObject.SetActive(true);
     }
 
     void Update()
     {
-        if (Input.GetButtonDown("AttackMain") && ownedSwords[mainWeapon] != null)
+        if (Input.GetButtonDown("AttackMain") && _OwnedSwords[_MainWeaponIndex] != null)
         {
             if (Input.GetButton("WeaponSecondary"))
-                ownedSwords[mainWeapon].DoSecondaryAttack();
+                _OwnedSwords[_MainWeaponIndex].DoSecondaryAttack();
             else
-                ownedSwords[mainWeapon].DoPrimaryAttack();
+                _OwnedSwords[_MainWeaponIndex].DoPrimaryAttack();
         }
-        else if (Input.GetButtonDown("AttackAlt") && ownedSwords[altWeapon] != null)
+        else if (Input.GetButtonDown("AttackAlt") && _OwnedSwords[_AltWeaponIndex] != null)
         {
             if (Input.GetButton("WeaponSecondary"))
-                ownedSwords[altWeapon].DoSecondaryAttack();
+                _OwnedSwords[_AltWeaponIndex].DoSecondaryAttack();
             else
-                ownedSwords[altWeapon].DoPrimaryAttack();
+                _OwnedSwords[_AltWeaponIndex].DoPrimaryAttack();
         }
     }
 }

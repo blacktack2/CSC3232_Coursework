@@ -1,83 +1,82 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Animator))]
 public class BasicSwordAnimHandler : MonoBehaviour
 {
-    [SerializeField]
-    private Animator animator;
-    [SerializeField]
-    private SwordController controller;
+    [SerializeField][Tooltip("Animator being handled.")]
+    private Animator _Animator;
+    [SerializeField][Tooltip("Sword controller responsible for the animator.")]
+    private SwordController _Controller;
 
     [SerializeField]
-    private float idleFlashDelay = 1.0f;
+    private float _IdleFlashDelay = 1.0f;
     [SerializeField]
-    private string idleFlashTrigger;
+    private string _IdleFlashAnimationTrigger;
 
     [SerializeField]
-    private GameObject sideSwingCollider;
+    private GameObject _SideSwingCollider;
     [SerializeField]
-    private GameObject upSwingCollider1;
+    private GameObject _UpSwingCollider1;
     [SerializeField]
-    private GameObject upSwingCollider2;
+    private GameObject _UpSwingCollider2;
 
-    private float idleFlashCounter = 0.0f;
+    private float _IdleFlashCounter = 0.0f;
 
     void Awake()
     {
-        sideSwingCollider.SetActive(false);
-        upSwingCollider1.SetActive(false);
-        upSwingCollider2.SetActive(false);
+        _SideSwingCollider.SetActive(false);
+        _UpSwingCollider1.SetActive(false);
+        _UpSwingCollider2.SetActive(false);
     }
 
     void Update()
     {
-        idleFlashCounter += Time.deltaTime;
+        _IdleFlashCounter += Time.deltaTime;
     }
 
     public void IdleFlashEvent()
     {
-        if (idleFlashCounter >= idleFlashDelay)
+        if (_IdleFlashCounter >= _IdleFlashDelay)
         {
-            idleFlashCounter = 0.0f;
-            animator.SetTrigger(idleFlashTrigger);
+            _IdleFlashCounter = 0.0f;
+            _Animator.SetTrigger(_IdleFlashAnimationTrigger);
         }
     }
 
     public void SetSideSwingCollider()
     {
-        sideSwingCollider.SetActive(true);
+        _SideSwingCollider.SetActive(true);
     }
 
     public void StopSideSwingColliders()
     {
-        sideSwingCollider.SetActive(false);
+        _SideSwingCollider.SetActive(false);
     }
 
     public void EndSideSwing()
     {
-        controller.SwingStopped();
+        _Controller.SwingStopped();
     }
 
     public void SetUpSwingCollider1()
     {
-        upSwingCollider1.SetActive(true);
+        _UpSwingCollider1.SetActive(true);
     }
 
     public void SetUpSwingCollider2()
     {
-        upSwingCollider1.SetActive(false);
-        upSwingCollider2.SetActive(true);
+        _UpSwingCollider1.SetActive(false);
+        _UpSwingCollider2.SetActive(true);
     }
 
     public void StopUpSwingColliders()
     {
-        upSwingCollider1.SetActive(false);
-        upSwingCollider2.SetActive(false);
+        _UpSwingCollider1.SetActive(false);
+        _UpSwingCollider2.SetActive(false);
     }
 
     public void EndUpSwing()
     {
-        controller.SwingStopped();
+        _Controller.SwingStopped();
     }
 }

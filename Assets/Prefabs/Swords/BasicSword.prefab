@@ -172,13 +172,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d172fcd83d0099e429dff3ff64bd00e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 2141889986528736216}
-  controller: {fileID: 2141889987474366981}
-  idleFlashDelay: 5
-  idleFlashTrigger: IdleFlash
-  sideSwingCollider: {fileID: 2141889986600960350}
-  upSwingCollider1: {fileID: 2141889987373828891}
-  upSwingCollider2: {fileID: 2141889986512657400}
+  _Animator: {fileID: 2141889986528736216}
+  _Controller: {fileID: 2141889987474366981}
+  _IdleFlashDelay: 1
+  _IdleFlashAnimationTrigger: IdleFlash
+  _SideSwingCollider: {fileID: 2141889986600960350}
+  _UpSwingCollider1: {fileID: 2141889987373828891}
+  _UpSwingCollider2: {fileID: 2141889986512657400}
 --- !u!1 &2141889986600960350
 GameObject:
   m_ObjectHideFlags: 0
@@ -360,21 +360,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1375d6c945263744b8e4b7a3b46077ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wielder: {fileID: 0}
-  animator: {fileID: 2141889986528736216}
-  m_rigidbody2D: {fileID: 2141889987474366980}
-  canTarget:
-    serializedVersion: 2
-    m_Bits: 128
-  followPoint: {fileID: 0}
-  attackPoint: {fileID: 0}
-  followSpeed: 2
-  followHoverRange: 0.5
-  followHoverSpeed: 1
-  primaryRepeatDelay: 0.1
-  secondaryRepeatDelay: 0.5
-  primaryForce: {x: 500, y: 0}
-  secondaryForce: {x: 500, y: 800}
+  _Wielder: {fileID: 0}
+  _Animator: {fileID: 2141889986528736216}
+  _Rigidbody2D: {fileID: 2141889987474366980}
+  _FollowPoint: {fileID: 0}
+  _AttackPoint: {fileID: 0}
+  _FollowSpeed: 2
+  _FollowHoverRange: 0.5
+  _FollowHoverSpeed: 1
+  _PrimaryRepeatDelay: 0.1
+  _SecondaryRepeatDelay: 0.5
+  _PrimaryForce: {x: 500, y: 0}
+  _SecondaryForce: {x: 500, y: 800}
 --- !u!1 &2141889987602176085
 GameObject:
   m_ObjectHideFlags: 0

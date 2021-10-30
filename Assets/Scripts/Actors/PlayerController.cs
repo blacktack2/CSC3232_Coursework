@@ -1,55 +1,53 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField]
-    private CharacterController2D controller;
+    [SerializeField][Tooltip("Main character controller to be handled.")]
+    private CharacterController2D _CharacterController;
 
-    [SerializeField]
-    private Rigidbody2D m_rigidbody2D;
+    [SerializeField][Tooltip("Main rigidbody responsible for character physics.")]
+    private Rigidbody2D _Rigidbody2D;
 
-    [SerializeField]
-    private Animator animator;
+    [SerializeField][Tooltip("Main animator responsible for displaying the character.")]
+    private Animator _Animator;
 
-    [SerializeField]
-    private float runSpeed = 40f;
+    [SerializeField][Tooltip("Speed the character should move whilst in the run state.")]
+    private float _RunSpeed = 40f;
 
-    private float horizontalMove = 0f;
-    private bool doJump = false;
-    private bool doCrouch = false;
+    private float _HorizontalMove = 0f;
+    private bool _DoJump = false;
+    private bool _DoCrouch = false;
 
     void Update()
     {
         float horizontal = Input.GetAxisRaw("Horizontal");
-        horizontalMove = horizontal * runSpeed;
+        _HorizontalMove = horizontal * _RunSpeed;
 
-        doJump = Input.GetButton("Jump");
-        doCrouch = Input.GetButton("Crouch");
+        _DoJump = Input.GetButton("Jump");
+        _DoCrouch = Input.GetButton("Crouch");
 
-        animator.SetInteger("motionHorizontal", (int) Mathf.Abs(horizontal));
-        animator.SetFloat("motionVertical", m_rigidbody2D.velocity.y);
-        animator.SetBool("isGrounded", controller.IsGrounded());
-    }
-
-    public void OnCrouching(bool isCrouching)
-    {
-        animator.SetBool("isCrouched", isCrouching);
-    }
-
-    public void OnJumping()
-    {
-        animator.SetTrigger("onJump");
-    }
-
-    public void OnLanding()
-    {
-        animator.SetTrigger("onLand");
+        _Animator.SetInteger("motionHorizontal", (int) Mathf.Abs(horizontal));
+        _Animator.SetFloat("motionVertical", _Rigidbody2D.velocity.y);
+        _Animator.SetBool("isGrounded", _CharacterController.IsGrounded());
     }
 
     void FixedUpdate()
     {
-        controller.Move(horizontalMove * Time.fixedDeltaTime, doCrouch, doJump);
+        _CharacterController.Move(_HorizontalMove * Time.fixedDeltaTime, _DoCrouch, _DoJump);
+    }
+
+    public void OnCrouching(bool isCrouching)
+    {
+        _Animator.SetBool("isCrouched", isCrouching);
+    }
+
+    public void OnJumping()
+    {
+        _Animator.SetTrigger("onJump");
+    }
+
+    public void OnLanding()
+    {
+        _Animator.SetTrigger("onLand");
     }
 }

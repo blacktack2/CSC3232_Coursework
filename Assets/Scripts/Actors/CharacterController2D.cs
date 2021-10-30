@@ -1,150 +1,131 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 // Modified code sourced from: https://github.com/Brackeys/2D-Character-Controller/blob/master/CharacterController2D.cs
 public class CharacterController2D : MonoBehaviour
 {
-	[SerializeField]
-    private float m_JumpForce = 400f;							// Amount of force added when the player jumps.
-    [SerializeField]
-    private float jumpDelay = 0.2f;
-	[Range(0, 1)] [SerializeField]
-    private float m_CrouchSpeed = .36f;			// Amount of maxSpeed applied to crouching movement. 1 = 100%
+	[SerializeField][Tooltip("Main rigidbody responsible for character physics.")]
+	private Rigidbody2D _Rigidbody2D;
+	[SerializeField][Tooltip("Force to apply to the rigidbody when a jump action is called.")]
+    private float _JumpForce = 400f;
+    [SerializeField][Tooltip("Time (seconds) until another jump action can be called.")]
+    private float _JumpDelay = 0.2f;
+	[Range(0, 1)] [SerializeField][Tooltip("Speed the character moves whilst crouching (in proportion to the normal movement speed)")]
+    private float _CrouchSpeed = .36f;
 	[Range(0, .3f)] [SerializeField]
-    private float m_MovementSmoothing = .05f;	// How much to smooth out the movement
-	[SerializeField]
-    private bool m_AirControl = false;							// Whether or not a player can steer while jumping;
-	[SerializeField]
-    private LayerMask m_WhatIsGround;							// A mask determining what is ground to the character
-	[SerializeField]
-    private CollisionCheck m_GroundCheck;							// A position marking where to check if the player is grounded.
-	[SerializeField]
-    private CollisionCheck m_CeilingCheck;							// A position marking where to check for ceilings
-	[SerializeField]
-    private Collider2D IdleCollider;
-	[SerializeField]
-    private Collider2D CrouchCollider;
-	[SerializeField]
-	private GameObject sprite;
+    private float _MovementSmoothing = .05f;
+	[SerializeField][Tooltip("Whether this character should be allowed control movement whilst airborn.")]
+    private bool _AirControl = false;
+	[SerializeField][Tooltip("Trigger used to define approximately when the character is touching the ground.")]
+    private CollisionCheck _GroundCheck;
+	[SerializeField][Tooltip("Trigger used to define approximately when the character should be touching the ceiling whilst idle.")]
+    private CollisionCheck _CeilingCheck;
+	[SerializeField][Tooltip("Collider to be present whilst in the idle state.")]
+    private Collider2D _IdleCollider;
+	[SerializeField][Tooltip("Collider to be present whilst in the crouched state.")]
+    private Collider2D _CrouchCollider;
 
-	const float k_GroundedRadius = .2f; // Radius of the overlap circle to determine if grounded
-	private bool m_Grounded;            // Whether or not the player is grounded.
-	const float k_CeilingRadius = .2f; // Radius of the overlap circle to determine if the player can stand up
-	private Rigidbody2D m_Rigidbody2D;
-	private bool m_FacingRight = true;  // For determining which way the player is currently facing.
-	private Vector3 m_Velocity = Vector3.zero;
-    private float lastJump = 0.0f;
+	private bool _IsGrounded;
+	private bool _FacingRight = true;
+	
+	private Vector3 _Velocity = Vector3.zero;
+
+    private float _SinceLastJump = 0.0f;
 
 	[Header("Events")]
 	[Space]
 
-	public UnityEvent OnJumpEvent;
-	public UnityEvent OnLandEvent;
+	[SerializeField]
+	private UnityEvent _OnJumpEvent;
+	[SerializeField]
+	private UnityEvent _OnLandEvent;
 
 	[System.Serializable]
-	public class BoolEvent : UnityEvent<bool> { }
+	private class BoolEvent : UnityEvent<bool> { }
 
-	public BoolEvent OnCrouchEvent;
-	private bool m_wasCrouching = false;
+	[SerializeField]
+	private BoolEvent _OnCrouchEvent;
+	private bool _WasCrouching = false;
 
 	private void Awake()
 	{
-		m_Rigidbody2D = GetComponent<Rigidbody2D>();
+		if (_OnJumpEvent == null)
+			_OnJumpEvent = new UnityEvent();
+		if (_OnLandEvent == null)
+			_OnLandEvent = new UnityEvent();
 
-		if (OnJumpEvent == null)
-			OnJumpEvent = new UnityEvent();
-		if (OnLandEvent == null)
-			OnLandEvent = new UnityEvent();
-
-		if (OnCrouchEvent == null)
-			OnCrouchEvent = new BoolEvent();
+		if (_OnCrouchEvent == null)
+			_OnCrouchEvent = new BoolEvent();
 	}
 
 	private void FixedUpdate()
 	{
-        lastJump += Time.fixedDeltaTime;
-		bool wasGrounded = m_Grounded;
-        m_Grounded = m_GroundCheck.IsTriggered();
-		if (m_Grounded && ! wasGrounded)
-			OnLandEvent.Invoke();
+        _SinceLastJump += Time.fixedDeltaTime;
+		bool wasGrounded = _IsGrounded;
+        _IsGrounded = _GroundCheck.IsTriggered();
+		if (_IsGrounded && ! wasGrounded)
+			_OnLandEvent.Invoke();
 	}
 
 	public void Move(float move, bool crouch, bool jump)
 	{
-		// If crouching, check to see if the character can stand up
-		if (m_wasCrouching && !crouch)
+		if (_WasCrouching && !crouch)
 		{
-            if (m_CeilingCheck.IsTriggered())
+            if (_CeilingCheck.IsTriggered())
 			{
 				crouch = true;
 			}
 		}
 
-		//only control the player if grounded or airControl is turned on
-		if (m_Grounded || m_AirControl)
+		if (_IsGrounded || _AirControl)
 		{
-			// If crouching
 			if (crouch)
 			{
-				if (!m_wasCrouching)
+				if (!_WasCrouching)
 				{
-					m_wasCrouching = true;
-					OnCrouchEvent.Invoke(true);
+					_WasCrouching = true;
+					_OnCrouchEvent.Invoke(true);
 				}
 
-				// Reduce the speed by the crouchSpeed multiplier
-				move *= m_CrouchSpeed;
+				move *= _CrouchSpeed;
 
-                CrouchCollider.enabled = true;
-                IdleCollider.enabled = false;
+                _CrouchCollider.enabled = true;
+                _IdleCollider.enabled = false;
 			}
             else
 			{
-            // Enable the collider when not crouching
-                IdleCollider.enabled = true;
-                CrouchCollider.enabled = false;
+                _IdleCollider.enabled = true;
+                _CrouchCollider.enabled = false;
 
-				if (m_wasCrouching)
+				if (_WasCrouching)
 				{
-					m_wasCrouching = false;
-					OnCrouchEvent.Invoke(false);
+					_WasCrouching = false;
+					_OnCrouchEvent.Invoke(false);
 				}
 			}
 
-			// Move the character by finding the target velocity
-			Vector3 targetVelocity = new Vector2(move * 10f, m_Rigidbody2D.velocity.y);
-			// And then smoothing it out and applying it to the character
-			m_Rigidbody2D.velocity = Vector3.SmoothDamp(m_Rigidbody2D.velocity, targetVelocity, ref m_Velocity, m_MovementSmoothing);
+			Vector3 targetVelocity = new Vector2(move * 10f, _Rigidbody2D.velocity.y);
+			_Rigidbody2D.velocity = Vector3.SmoothDamp(_Rigidbody2D.velocity, targetVelocity, ref _Velocity, _MovementSmoothing);
 
-			if (move > 0 && !m_FacingRight)
-			{
-				// ... flip the player.
+			if (move > 0 && !_FacingRight)
 				Flip();
-			}
-			else if (move < 0 && m_FacingRight)
-			{
-				// ... flip the player.
+			else if (move < 0 && _FacingRight)
 				Flip();
-			}
 		}
-		// If the player should jump...
-		if (m_Grounded && jump && lastJump >= jumpDelay)
+
+		if (_IsGrounded && jump && _SinceLastJump >= _JumpDelay)
 		{
-			// Add a vertical force to the player.
-            lastJump = 0.0f;
-			m_Grounded = false;
-			m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce));
-			OnJumpEvent.Invoke();
+            _SinceLastJump = 0.0f;
+			_IsGrounded = false;
+			_Rigidbody2D.AddForce(new Vector2(0f, _JumpForce));
+			_OnJumpEvent.Invoke();
 		}
 	}
 
 	private void Flip()
 	{
-		// Switch the way the player is labelled as facing.
-		m_FacingRight = !m_FacingRight;
+		_FacingRight = !_FacingRight;
 
-		// Multiply the player's x local scale by -1.
 		Vector3 theScale = transform.localScale;
 		theScale.x *= -1;
 		transform.localScale = theScale;
@@ -152,6 +133,6 @@ public class CharacterController2D : MonoBehaviour
 
 	public bool IsGrounded()
 	{
-		return m_Grounded;
+		return _IsGrounded;
 	}
 }

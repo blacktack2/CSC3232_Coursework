@@ -1,21 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GlobalConstants : MonoBehaviour
 {
-    [SerializeField]
-    public static LayerMask whatIsGround;
-
-    private static GlobalConstants instance = null;
+    private static GlobalConstants _Instance = null;
 
     public static GlobalConstants GetInstance()
     {
-        if (instance == null)
+        if (_Instance == null)
         {
             GameObject go = new GameObject();
-            instance = go.AddComponent<GlobalConstants>();
+            _Instance = go.AddComponent<GlobalConstants>();
         }
-        return instance;
+        return _Instance;
     }
 }

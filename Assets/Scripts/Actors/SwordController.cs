@@ -1,59 +1,53 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SwordController : MonoBehaviour
 {
-    [SerializeField]
-    private SwordWielder wielder;
-    [SerializeField]
-    private Animator animator;
-    [SerializeField]
-    private Rigidbody2D m_rigidbody2D;
+    [SerializeField][Tooltip("The sword wielder this weapon is attached to if applicable.")]
+    private SwordWielder _Wielder;
+    [SerializeField][Tooltip("Main animator for this controller to set the parameters of to represent each state.")]
+    private Animator _Animator;
+    [SerializeField][Tooltip("Main rigidbody with which to move and reposition the sword.")]
+    private Rigidbody2D _Rigidbody2D;
 
-    [SerializeField]
-    private LayerMask canTarget;
+    [SerializeField][Tooltip("Transform for the rigidbody to move towards whilst idle. To be replaced with an offset parameter relative to the wielder.")]
+    private Transform _FollowPoint;
+    [SerializeField][Tooltip("Transform for this controller to exactly match whilst attacking. To be replaced with an offset parameter relative to the wielder.")]
+    private Transform _AttackPoint;
 
-    [SerializeField]
-    private Transform followPoint;
-    [SerializeField]
-    private Transform attackPoint;
-
-    [SerializeField]
-    private float followSpeed = 1.0f;
-    [SerializeField]
-    private float followHoverRange = 0.5f;
-    [SerializeField]
-    private float followHoverSpeed = 1.0f;
+    [SerializeField][Tooltip("Speed at which to follow the follow point during the idle-follow state.")]
+    private float _FollowSpeed = 1.0f;
+    [SerializeField][Tooltip("Distance from the follow point at which the sword should change to the idle-hover state.")]
+    private float _FollowHoverRange = 0.5f;
+    [SerializeField][Tooltip("Speed at which to randomly hover around the follow point during the idle-hover state")]
+    private float _FollowHoverSpeed = 1.0f;
     
-    [SerializeField]
-    private float primaryRepeatDelay = 1.0f;
-    [SerializeField]
-    private float secondaryRepeatDelay = 1.0f;
+    [SerializeField][Tooltip("Delay (in seconds) before being allowed to attack again after a primary attack has finished.")]
+    private float _PrimaryRepeatDelay = 1.0f;
+    [SerializeField][Tooltip("Delay (in seconds) before beign allowed to attack again after a secondary attack has finished.")]
+    private float _SecondaryRepeatDelay = 1.0f;
 
-    [SerializeField]
-    private Vector2 primaryForce;
-    [SerializeField]
-    private Vector2 secondaryForce;
+    [SerializeField][Tooltip("Force applied to force receivers when hit by a primary attack.")]
+    private Vector2 _PrimaryForce;
+    [SerializeField][Tooltip("Force applied to force receivers when hit by a secondary attack.")]
+    private Vector2 _SecondaryForce;
 
-    private float repeatDelay = 0.0f;
+    private float _RepeatDelay = 0.0f; // Delay until the controller is allowed to attack again
 
-    private bool doPrimaryAttack = false;
-    private bool isDoingPrimary = false;
-    private bool doSecondaryAttack = false;
-    private bool isDoingSecondary = false;
-    private bool isSwinging = false;
+    private bool _DoPrimaryAttack = false;
+    private bool IsDoingPrimaryAttack = false;
+    private bool _DoSecondaryAttack = false;
+    private bool _IsDoingSecondaryAttack = false;
+    private bool _IsAttacking = false;
 
-    private float sinceLastSwing = 0.0f;
+    private float _SinceLastAttack = 0.0f;
 
-    private bool facingRight = true;
+    private bool _IsFacingRight = true;
 
-    private float followHoverSeed = 0;
+    private float _IdleRandomHoverSeed = 0;
 
     void Awake()
     {
-        followHoverSeed = UnityEngine.Random.Range(-1000.0f, 1000.0f);
+        _IdleRandomHoverSeed = UnityEngine.Random.Range(-1000.0f, 1000.0f);
     }
 
     void FixedUpdate()
@@ -64,78 +58,78 @@ public class SwordController : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (isSwinging)
+        if (_IsAttacking)
         {
             ForceReceiver otherRigidbody = other.GetComponentInParent<ForceReceiver>();
             if (otherRigidbody != null)
             {
-                if (isDoingPrimary)
-                    otherRigidbody.ApplyForce(primaryForce * transform.localScale);
-                else if (isDoingSecondary)
-                    otherRigidbody.ApplyForce(secondaryForce * transform.localScale);
+                if (IsDoingPrimaryAttack)
+                    otherRigidbody.ApplyForce(_PrimaryForce * transform.localScale);
+                else if (_IsDoingSecondaryAttack)
+                    otherRigidbody.ApplyForce(_SecondaryForce * transform.localScale);
             }
         }
     }
 
     private void DoTransformActions()
     {
-        if (isSwinging)
+        if (_IsAttacking)
         {
-            m_rigidbody2D.isKinematic = true;
-            transform.position = attackPoint.position;
+            _Rigidbody2D.isKinematic = true;
+            transform.position = _AttackPoint.position;
         }
         else
         {
             Vector2 delta = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-            if (delta.x >= 0 && !facingRight)
+            if (delta.x >= 0 && !_IsFacingRight)
             {
                 Flip();
             }
-            else if (delta.x < 0 && facingRight)
+            else if (delta.x < 0 && _IsFacingRight)
             {
                 Flip();
             }
             
-            m_rigidbody2D.isKinematic = false;
-            if (Vector2.Distance(transform.position, followPoint.position) > followHoverRange)
+            _Rigidbody2D.isKinematic = false;
+            if (Vector2.Distance(transform.position, _FollowPoint.position) > _FollowHoverRange)
             {
-                m_rigidbody2D.velocity = followSpeed * (followPoint.position - transform.position);
+                _Rigidbody2D.velocity = _FollowSpeed * (_FollowPoint.position - transform.position);
             }
             else
             {
-                m_rigidbody2D.velocity = followHoverSpeed * (
-                    followPoint.position - transform.position +
-                     new Vector3(Mathf.PerlinNoise(Time.time, followHoverSeed), Mathf.PerlinNoise(followHoverSeed, Time.time), 0.0f)
-                      * followHoverRange);
+                _Rigidbody2D.velocity = _FollowHoverSpeed * (
+                    _FollowPoint.position - transform.position +
+                     new Vector3(Mathf.PerlinNoise(Time.time, _IdleRandomHoverSeed), Mathf.PerlinNoise(_IdleRandomHoverSeed, Time.time), 0.0f)
+                      * _FollowHoverRange);
             }
         }
     }
 
     private void DoAttackChecks()
     {
-        sinceLastSwing += Time.fixedDeltaTime;
+        _SinceLastAttack += Time.fixedDeltaTime;
 
-        if (doPrimaryAttack)
+        if (_DoPrimaryAttack)
         {
-            doPrimaryAttack = false;
-            if (!isSwinging && sinceLastSwing > repeatDelay)
+            _DoPrimaryAttack = false;
+            if (!_IsAttacking && _SinceLastAttack > _RepeatDelay)
             {
-                isSwinging = true;
-                isDoingPrimary = true;
-                repeatDelay = primaryRepeatDelay;
-                animator.SetTrigger("PrimaryAttack");
+                _IsAttacking = true;
+                IsDoingPrimaryAttack = true;
+                _RepeatDelay = _PrimaryRepeatDelay;
+                _Animator.SetTrigger("PrimaryAttack");
             }
         }
 
-        if (doSecondaryAttack)
+        if (_DoSecondaryAttack)
         {
-            doSecondaryAttack = false;
-            if (!isSwinging && sinceLastSwing > repeatDelay)
+            _DoSecondaryAttack = false;
+            if (!_IsAttacking && _SinceLastAttack > _RepeatDelay)
             {
-                isSwinging = true;
-                isDoingSecondary = true;
-                repeatDelay = secondaryRepeatDelay;
-                animator.SetTrigger("SecondaryAttack");
+                _IsAttacking = true;
+                _IsDoingSecondaryAttack = true;
+                _RepeatDelay = _SecondaryRepeatDelay;
+                _Animator.SetTrigger("SecondaryAttack");
             }
         }
     }
@@ -143,7 +137,7 @@ public class SwordController : MonoBehaviour
 	private void Flip()
 	{
 		// Switch the way the player is labelled as facing.
-		facingRight = !facingRight;
+		_IsFacingRight = !_IsFacingRight;
 
 		// Multiply the player's x local scale by -1.
 		Vector3 theScale = transform.localScale;
@@ -153,26 +147,26 @@ public class SwordController : MonoBehaviour
 
     public void SetWeilder(SwordWielder wielder, Transform followPoint, Transform attackPoint)
     {
-        this.wielder = wielder;
-        this.followPoint = followPoint;
-        this.attackPoint = attackPoint;
+        this._Wielder = wielder;
+        this._FollowPoint = followPoint;
+        this._AttackPoint = attackPoint;
     }
 
     public void DoPrimaryAttack()
     {
-        doPrimaryAttack = true;
+        _DoPrimaryAttack = true;
     }
 
     public void DoSecondaryAttack()
     {
-        doSecondaryAttack = true;
+        _DoSecondaryAttack = true;
     }
 
     public void SwingStopped()
     {
-        isSwinging = false;
-        isDoingPrimary = false;
-        isDoingSecondary = false;
-        sinceLastSwing = 0.0f;
+        _IsAttacking = false;
+        IsDoingPrimaryAttack = false;
+        _IsDoingSecondaryAttack = false;
+        _SinceLastAttack = 0.0f;
     }
 }
