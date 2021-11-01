@@ -150,10 +150,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 612227aec19093e429ff9f7e2df96b83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_rigidbody2D: {fileID: -1117136242513210147}
-  fragileObject: {fileID: 2137828447774902986}
-  isStatic: 0
-  staticBreakForce: 0
+  _Rigidbody2D: {fileID: -1117136242513210147}
+  _FragileObject: {fileID: 2137828447774902986}
+  _IsStatic: 0
+  _StaticBreakForce: 0
 --- !u!114 &2137828447774902986
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -166,9 +166,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 465ce679edf445448ac414afa3d42290, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_rigidbody2d: {fileID: -1117136242513210147}
-  breakingForce: 1
-  isFragile: 0
+  _BreakingForce: 1
+  _IsFragile: 1
 --- !u!1 &5508841318953016364
 GameObject:
   m_ObjectHideFlags: 0
