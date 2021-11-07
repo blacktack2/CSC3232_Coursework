@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2141889986512657403}
   - component: {fileID: 2141889986512657285}
+  - component: {fileID: 5997870606907849441}
   m_Layer: 10
-  m_Name: UpSwingTrigger2
+  m_Name: SecondaryAttackTrigger1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -57,6 +58,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.9681702, y: 1.6889925}
   m_EdgeRadius: 0
+--- !u!114 &5997870606907849441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2141889986512657400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e14c68a7fd06264181371f9a9c3a6de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ParentMachine: {fileID: 3443429749330939254}
+  _AttackForce: {x: 1000, y: 500}
 --- !u!1 &2141889986528736210
 GameObject:
   m_ObjectHideFlags: 0
@@ -68,7 +83,7 @@ GameObject:
   - component: {fileID: 2141889986528736221}
   - component: {fileID: 2141889986528736220}
   - component: {fileID: 2141889986528736216}
-  - component: {fileID: 2141889986528736217}
+  - component: {fileID: 6182369916504116826}
   m_Layer: 10
   m_Name: SwordSprite
   m_TagString: Untagged
@@ -160,7 +175,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &2141889986528736217
+--- !u!114 &6182369916504116826
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -169,16 +184,74 @@ MonoBehaviour:
   m_GameObject: {fileID: 2141889986528736210}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d172fcd83d0099e429dff3ff64bd00e7, type: 3}
+  m_Script: {fileID: 11500000, guid: 65b0d39949d964d4dace1b632bfc6663, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _Animator: {fileID: 2141889986528736216}
-  _Controller: {fileID: 2141889987474366981}
-  _IdleFlashDelay: 1
-  _IdleFlashAnimationTrigger: IdleFlash
-  _SideSwingCollider: {fileID: 2141889986600960350}
-  _UpSwingCollider1: {fileID: 2141889987373828891}
-  _UpSwingCollider2: {fileID: 2141889986512657400}
+  _ActionList:
+  - name: EndSwing
+    action:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 3443429749330939254}
+          m_TargetAssemblyTypeName: BasicSwordMachine, Assembly-CSharp
+          m_MethodName: DoEndAttack
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - name: SetAttackCollider0
+    action:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 3443429749330939254}
+          m_TargetAssemblyTypeName: BasicSwordMachine, Assembly-CSharp
+          m_MethodName: SetAttackCollider
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - name: SetAttackCollider1
+    action:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 3443429749330939254}
+          m_TargetAssemblyTypeName: BasicSwordMachine, Assembly-CSharp
+          m_MethodName: SetAttackCollider
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 1
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - name: SetAttackCollider2
+    action:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 3443429749330939254}
+          m_TargetAssemblyTypeName: BasicSwordMachine, Assembly-CSharp
+          m_MethodName: SetAttackCollider
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 2
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &2141889986600960350
 GameObject:
   m_ObjectHideFlags: 0
@@ -189,8 +262,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2141889986600960345}
   - component: {fileID: 2141889986600960344}
+  - component: {fileID: 7250106237699078885}
   m_Layer: 10
-  m_Name: SideSwingTrigger
+  m_Name: PrimaryAttackTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -236,6 +310,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2.6961217, y: 0.955657}
   m_EdgeRadius: 0
+--- !u!114 &7250106237699078885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2141889986600960350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e14c68a7fd06264181371f9a9c3a6de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ParentMachine: {fileID: 3443429749330939254}
+  _AttackForce: {x: 500, y: 50}
 --- !u!1 &2141889987373828891
 GameObject:
   m_ObjectHideFlags: 0
@@ -246,8 +334,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2141889987373828890}
   - component: {fileID: 2141889987373828901}
+  - component: {fileID: 6507691695543734514}
   m_Layer: 10
-  m_Name: UpSwingTrigger1
+  m_Name: SecondaryAttackTrigger0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -293,6 +382,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.9681702, y: 2.7221859}
   m_EdgeRadius: 0
+--- !u!114 &6507691695543734514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2141889987373828891}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e14c68a7fd06264181371f9a9c3a6de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ParentMachine: {fileID: 3443429749330939254}
+  _AttackForce: {x: 1000, y: 500}
 --- !u!1 &2141889987474367099
 GameObject:
   m_ObjectHideFlags: 0
@@ -303,7 +406,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2141889987474367098}
   - component: {fileID: 2141889987474366980}
-  - component: {fileID: 2141889987474366981}
+  - component: {fileID: 3443429749330939254}
   m_Layer: 10
   m_Name: BasicSword
   m_TagString: Untagged
@@ -348,7 +451,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &2141889987474366981
+--- !u!114 &3443429749330939254
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -357,21 +460,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 2141889987474367099}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1375d6c945263744b8e4b7a3b46077ad, type: 3}
+  m_Script: {fileID: 11500000, guid: 536e1ae4a90daf747b6160fc50a948db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _Wielder: {fileID: 0}
   _Animator: {fileID: 2141889986528736216}
-  _Rigidbody2D: {fileID: 2141889987474366980}
-  _FollowPoint: {fileID: 0}
-  _AttackPoint: {fileID: 0}
-  _FollowSpeed: 2
-  _FollowHoverRange: 0.5
-  _FollowHoverSpeed: 1
-  _PrimaryRepeatDelay: 0.1
-  _SecondaryRepeatDelay: 0.5
-  _PrimaryForce: {x: 500, y: 0}
-  _SecondaryForce: {x: 500, y: 800}
+  _PrimaryAttackColliders:
+  - {fileID: 2141889986600960344}
+  _SecondaryAttackColliders:
+  - {fileID: 2141889987373828901}
+  - {fileID: 2141889986512657285}
+  _HoverRange: 0.5
+  _FollowSpeed: 3
+  _HoverSpeed: 2
+  _IsFacingRight: 1
 --- !u!1 &2141889987602176085
 GameObject:
   m_ObjectHideFlags: 0

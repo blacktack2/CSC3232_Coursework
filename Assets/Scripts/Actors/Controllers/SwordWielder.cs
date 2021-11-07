@@ -3,7 +3,7 @@ using UnityEngine;
 public class SwordWielder : MonoBehaviour
 {
     [SerializeField][Tooltip("List of swords this wielder owns.")]
-    private SwordController[] _OwnedSwords;
+    private BasicSwordMachine[] _OwnedSwords;
     [SerializeField][Tooltip("Index of the owned sword to be set as the main weapon.")]
     private int _MainWeaponIndex = 0;
     [SerializeField][Tooltip("Index of the owned sword to be set as the alternate weapon")]
@@ -16,11 +16,11 @@ public class SwordWielder : MonoBehaviour
 
     void Awake()
     {
-        foreach (SwordController sword in _OwnedSwords)
+        foreach (BasicSwordMachine sword in _OwnedSwords)
         {
             if (sword != null)
             {
-                sword.SetWeilder(this, _SwordFollowPoint, _SwordAttackPoint);
+                sword.SetWeilder(this);
                 sword.gameObject.SetActive(false);
             }
         }
@@ -46,5 +46,12 @@ public class SwordWielder : MonoBehaviour
             else
                 _OwnedSwords[_AltWeaponIndex].DoPrimaryAttack();
         }
+    }
+
+    void FixedUpdate()
+    {
+        Vector2 delta = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+        _OwnedSwords[_MainWeaponIndex].SetDirection(delta.x > 0);
+        _OwnedSwords[_AltWeaponIndex].SetDirection(delta.x > 0);
     }
 }

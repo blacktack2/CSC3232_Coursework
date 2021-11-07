@@ -15,7 +15,7 @@ public class CollisionCheck : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (1 << other.gameObject.layer == _WhatIsGround.value)
+        if ((_WhatIsGround.value | (1 << other.gameObject.layer)) == _WhatIsGround.value)
             triggerObjects.Add(other);
     }
 

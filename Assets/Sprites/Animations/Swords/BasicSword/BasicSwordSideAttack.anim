@@ -79,22 +79,22 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0
-    functionName: SetSideSwingCollider
-    data: 
+    functionName: CallEvent
+    data: SetAttackCollider0
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.0625
-    functionName: StopSideSwingColliders
-    data: 
+    functionName: CallEvent
+    data: SetAttackCollider1
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.3125
-    functionName: EndSideSwing
-    data: 
+    functionName: CallEvent
+    data: EndSwing
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0

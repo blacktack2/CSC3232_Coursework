@@ -1,6 +1,5 @@
 using UnityEngine;
 
-[RequireComponent(typeof(ForceReceiver))]
 public class FragileObject : MonoBehaviour
 {
     [SerializeField][Tooltip("Force required to break this object if is fragile.")]
