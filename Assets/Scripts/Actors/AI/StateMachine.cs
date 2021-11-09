@@ -6,7 +6,7 @@ public abstract class StateMachine : MonoBehaviour
     private BaseState _CurrentState;
     protected BaseState currentState {get {return _CurrentState;}}
 
-    void Start()
+    protected virtual void Awake()
     {
         _CurrentState = GetInitialState();
         if (_CurrentState != null)
@@ -19,7 +19,7 @@ public abstract class StateMachine : MonoBehaviour
             _CurrentState.UpdateLogic();
     }
 
-    void LateUpdate()
+    void FixedUpdate()
     {
         if (_CurrentState != null)
             _CurrentState.UpdatePhysics();

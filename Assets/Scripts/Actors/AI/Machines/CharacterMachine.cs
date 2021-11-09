@@ -56,12 +56,13 @@ public class CharacterMachine : StateMachine
     private CharacterMove _MoveState;
     public CharacterMove moveState {get {return _MoveState;}}
 
-    void Awake()
+    protected override void Awake()
     {
         _Rigidbody2D = GetComponent<Rigidbody2D>();
         _MoveState = new CharacterMove(this);
 
         _InitialScale = transform.localScale;
+        base.Awake();
     }
 
     protected override BaseState GetInitialState()

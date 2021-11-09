@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -9,6 +7,9 @@ public class BasicSwordMachine : StateMachine
     private Animator _Animator;
     public Animator animator {get {return _Animator;}}
 
+    [SerializeField]
+    private Collider2D _CollectableTrigger;
+    public Collider2D collectableTrigger {get {return _CollectableTrigger;}}
     [SerializeField]
     private Collider2D[] _PrimaryAttackColliders;
     public Collider2D[] primaryAttackColliders {get {return _PrimaryAttackColliders;}}
@@ -33,34 +34,40 @@ public class BasicSwordMachine : StateMachine
 
     public bool isFacingRight = true;
 
-    private BasicSwordIdle[] idleStates = new BasicSwordIdle[2];
     [HideInInspector]
-    public BasicSwordIdleFollow idleFollowState {get {return (BasicSwordIdleFollow) idleStates[0];} set {idleStates[0] = value;}}
+    public BasicSwordCollectable collectableState;
+    private BasicSwordIdle[] _IdleStates = new BasicSwordIdle[2];
     [HideInInspector]
-    public BasicSwordIdleHover idleHoverState {get {return (BasicSwordIdleHover) idleStates[1];} set {idleStates[1] = value;}}
-    private BasicSwordAttack[] attackStates = new BasicSwordAttack[2];
+    public BasicSwordIdleFollow idleFollowState {get {return (BasicSwordIdleFollow) _IdleStates[0];} set {_IdleStates[0] = value;}}
     [HideInInspector]
-    public BasicSwordAttackPrimary primaryAttackState {get {return (BasicSwordAttackPrimary) attackStates[0];} set {attackStates[0] = value;}}
+    public BasicSwordIdleHover idleHoverState {get {return (BasicSwordIdleHover) _IdleStates[1];} set {_IdleStates[1] = value;}}
+    private BasicSwordAttack[] _AttackStates = new BasicSwordAttack[2];
     [HideInInspector]
-    public BasicSwordAttackSecondary secondaryAttackState {get {return (BasicSwordAttackSecondary) attackStates[1];} set {attackStates[1] = value;}}
+    public BasicSwordAttackPrimary primaryAttackState {get {return (BasicSwordAttackPrimary) _AttackStates[0];} set {_AttackStates[0] = value;}}
+    [HideInInspector]
+    public BasicSwordAttackSecondary secondaryAttackState {get {return (BasicSwordAttackSecondary) _AttackStates[1];} set {_AttackStates[1] = value;}}
 
-    void Awake()
+    protected override void Awake()
     {
         _Rigidbody2D = GetComponent<Rigidbody2D>();
+        collectableState = new BasicSwordCollectable(this);
         idleFollowState = new BasicSwordIdleFollow(this);
         idleHoverState = new BasicSwordIdleHover(this);
         primaryAttackState = new BasicSwordAttackPrimary(this);
         secondaryAttackState = new BasicSwordAttackSecondary(this);
+        base.Awake();
     }
 
     protected override BaseState GetInitialState()
     {
-        return idleHoverState;
+        return collectableState;
     }
 
     public void SetWeilder(SwordWielder wielder)
     {
         _Wielder = wielder;
+        if (currentState is BasicSwordCollectable)
+            ((BasicSwordCollectable) currentState).SetCollected();
     }
 
     public void SetDirection(bool facingRight)

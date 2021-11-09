@@ -19,13 +19,13 @@ public class CharacterMove : CharacterState
 
     public CharacterMove(CharacterMachine stateMachine) : base("Move", stateMachine)
     {
-        _IsGrounded = _SM.groundCheck.IsTriggered();
-        _WasGrounded = _IsGrounded;
     }
 
     public override void Enter()
     {
         base.Enter();
+        _IsGrounded = _SM.groundCheck.IsTriggered();
+        _WasGrounded = _IsGrounded;
         _DoJump = false;
         _IsRunning = false;
         _IsCrouched = false;

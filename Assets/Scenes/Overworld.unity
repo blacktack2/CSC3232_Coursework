@@ -123,17 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!114 &11749124 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3443429749330939254, guid: d80cb5e1fdfde6f4f973a9d77d284078, type: 3}
-  m_PrefabInstance: {fileID: 1477630335}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 536e1ae4a90daf747b6160fc50a948db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &240686001
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -167,11 +156,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5157995935268705043, guid: 733342ee756362441aa2252b4b1f474c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 8
+      value: 19
       objectReference: {fileID: 0}
     - target: {fileID: 5157995935268705043, guid: 733342ee756362441aa2252b4b1f474c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.5
+      value: -3
       objectReference: {fileID: 0}
     - target: {fileID: 5157995935268705043, guid: 733342ee756362441aa2252b4b1f474c, type: 3}
       propertyPath: m_LocalPosition.z
@@ -264,32 +253,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7909376917668442919, guid: 0d9c4b5095257504bb110be1e7c34191, type: 3}
   m_PrefabInstance: {fileID: 7780352073289451899}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &463795671 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2020141051551604121, guid: 3bdaf28449741d04ab147bb0fe1cd3f2, type: 3}
-  m_PrefabInstance: {fileID: 6642853404515931807}
-  m_PrefabAsset: {fileID: 0}
---- !u!50 &463795674
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 463795671}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!1 &498368975
 GameObject:
   m_ObjectHideFlags: 0
@@ -3507,11 +3470,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2141889987474367098, guid: d80cb5e1fdfde6f4f973a9d77d284078, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2141889987474367098, guid: d80cb5e1fdfde6f4f973a9d77d284078, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -4.5
       objectReference: {fileID: 0}
     - target: {fileID: 2141889987474367098, guid: d80cb5e1fdfde6f4f973a9d77d284078, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3841,17 +3804,6 @@ Transform:
   m_Father: {fileID: 1443387392}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1919728058 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3443429749330939254, guid: d80cb5e1fdfde6f4f973a9d77d284078, type: 3}
-  m_PrefabInstance: {fileID: 2141889985680326597}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 536e1ae4a90daf747b6160fc50a948db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1996834562 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5157995935268705043, guid: 733342ee756362441aa2252b4b1f474c, type: 3}
@@ -3988,9 +3940,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2131758524}
   - component: {fileID: 2131758527}
+  - component: {fileID: 2131758526}
   - component: {fileID: 2131758530}
   - component: {fileID: 2131758528}
-  - component: {fileID: 2131758526}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -4030,12 +3982,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _OwnedSwords:
-  - {fileID: 1919728058}
-  - {fileID: 11749124}
+  - {fileID: 0}
+  - {fileID: 0}
   _MainWeaponIndex: 0
   _AltWeaponIndex: 1
-  _SwordFollowPoint: {fileID: 1414292739}
-  _SwordAttackPoint: {fileID: 498368976}
 --- !u!50 &2131758527
 Rigidbody2D:
   serializedVersion: 4
@@ -4110,7 +4060,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2141889987474367098, guid: d80cb5e1fdfde6f4f973a9d77d284078, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -4.5
       objectReference: {fileID: 0}
     - target: {fileID: 2141889987474367098, guid: d80cb5e1fdfde6f4f973a9d77d284078, type: 3}
       propertyPath: m_LocalPosition.z

@@ -8,11 +8,6 @@ public class CollisionCheck : MonoBehaviour
 
     public readonly List<Collider2D> triggerObjects = new List<Collider2D>();
 
-    void Start()
-    {
-        
-    }
-
     void OnTriggerEnter2D(Collider2D other)
     {
         if ((_WhatIsGround.value | (1 << other.gameObject.layer)) == _WhatIsGround.value)

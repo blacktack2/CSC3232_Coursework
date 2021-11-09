@@ -7,7 +7,6 @@ public class JumpPad : MonoBehaviour
 
     public void TriggerEntered(Collider2D other)
     {
-        Debug.Log(other.gameObject.name);
         Rigidbody2D rigidbody2D = other.attachedRigidbody;
         rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
         rigidbody2D.AddForce(_JumpForce);
