@@ -522,15 +522,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Animator: {fileID: 2141889986528736216}
-  _CollectableTrigger: {fileID: 2548220940541899145}
-  _PrimaryAttackColliders:
-  - {fileID: 2141889986600960344}
-  _SecondaryAttackColliders:
-  - {fileID: 2141889987373828901}
-  - {fileID: 2141889986512657285}
-  _HoverRange: 0.5
-  _FollowSpeed: 3
-  _HoverSpeed: 2
+  _StateParameters:
+    _Collectable:
+      _CollectableTrigger: {fileID: 2548220940541899145}
+    _Idle:
+      _Follow:
+        _FollowSpeed: 3
+      _Hover:
+        _HoverRange: 0.5
+        _HoverSpeed: 2
+    _Attack:
+      _Primary:
+        _PrimaryAttackColliders:
+        - {fileID: 2141889986600960344}
+      _Secondary:
+        _SecondaryAttackColliders:
+        - {fileID: 2141889987373828901}
+        - {fileID: 2141889986512657285}
   isFacingRight: 1
 --- !u!1 &2141889987602176085
 GameObject:

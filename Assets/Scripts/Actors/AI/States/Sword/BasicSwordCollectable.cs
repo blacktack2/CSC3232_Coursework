@@ -1,4 +1,3 @@
-using UnityEngine;
 
 public class BasicSwordCollectable : BasicSwordState
 {
@@ -9,14 +8,14 @@ public class BasicSwordCollectable : BasicSwordState
     public override void Enter()
     {
         base.Enter();
-        _SM.collectableTrigger.enabled = true;
+        _CollectableParameters.collectableTrigger.enabled = true;
         _SM.animator.SetBool("isCollectable", true);
     }
 
     public override void Exit()
     {
         base.Exit();
-        _SM.collectableTrigger.enabled = false;
+        _CollectableParameters.collectableTrigger.enabled = false;
         _SM.animator.SetBool("isCollectable", false);
     }
 

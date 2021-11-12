@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class SwordWielder : MonoBehaviour
 {
-    [SerializeField][Tooltip("List of swords this wielder owns.")]
+    [SerializeField, Tooltip("List of swords this wielder owns.")]
     private List<BasicSwordMachine> _OwnedSwords;
-    [SerializeField][Tooltip("Index of the owned sword to be set as the main weapon.")]
+    [SerializeField, Tooltip("Index of the owned sword to be set as the main weapon.")]
     private int _MainWeaponIndex = 0;
-    [SerializeField][Tooltip("Index of the owned sword to be set as the alternate weapon")]
+    [SerializeField, Tooltip("Index of the owned sword to be set as the alternate weapon")]
     private int _AltWeaponIndex = 1;
 
     private BasicSwordMachine _MainWeapon {get {return _OwnedSwords[_MainWeaponIndex];}}

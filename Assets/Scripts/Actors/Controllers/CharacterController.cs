@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CharacterController : MonoBehaviour
 {
-    [SerializeField]
+    [SerializeField, Tooltip("Character to send input signals to.")]
     private CharacterMachine _Machine;
 
     void Update()

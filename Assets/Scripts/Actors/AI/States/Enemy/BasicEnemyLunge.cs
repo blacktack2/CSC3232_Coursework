@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BasicEnemyLunge : BasicEnemyAggressive
@@ -16,7 +14,7 @@ public class BasicEnemyLunge : BasicEnemyAggressive
     public override void Enter()
     {
         base.Enter();
-        _LungeForce = (_SM.target.transform.position - _SM.transform.position).normalized * _SM.lungeForce;
+        _LungeForce = (_SM.target.transform.position - _SM.transform.position).normalized * _LungeParameters.lungeForce;
         _LungeWindup = 0.0f;
         _LungeCooldown = 0.0f;
         _SM.rigidbody2D.velocity = Vector3.zero;
@@ -27,7 +25,7 @@ public class BasicEnemyLunge : BasicEnemyAggressive
     {
         base.UpdatePhysics();
         _LungeWindup += Time.fixedDeltaTime;
-        if (_LungeWindup > _SM.lungeWindupTime)
+        if (_LungeWindup > _LungeParameters.lungeWindupTime)
         {
             if (_DoLunge)
             {
@@ -37,7 +35,7 @@ public class BasicEnemyLunge : BasicEnemyAggressive
             else
             {
                 _LungeCooldown += Time.fixedDeltaTime;
-                if (_LungeCooldown > _SM.lungeRecoverTime)
+                if (_LungeCooldown > _LungeParameters.lungeCooldownTime)
                     stateMachine.ChangeState(_SM.chaseState);
             }
         }

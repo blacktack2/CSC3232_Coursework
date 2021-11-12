@@ -3,7 +3,6 @@ using UnityEngine.Assertions;
 
 public class CharacterMove : CharacterState
 {
-
     private bool _DoJump = false;
     private bool _IsGrounded;
     private bool _WasGrounded;
@@ -24,15 +23,15 @@ public class CharacterMove : CharacterState
     public override void Enter()
     {
         base.Enter();
-        _IsGrounded = _SM.groundCheck.IsTriggered();
+        _IsGrounded = _MoveParameters.groundCheck.IsTriggered();
         _WasGrounded = _IsGrounded;
         _DoJump = false;
         _IsRunning = false;
         _IsCrouched = false;
-        movementSpeed = _SM.walkSpeed;
+        movementSpeed = _MoveParameters.walkSpeed;
 
-        _SM.standingCollider.enabled = true;
-        _SM.crouchingCollider.enabled = false;
+        _MoveParameters.standingCollider.enabled = true;
+        _MoveParameters.crouchingCollider.enabled = false;
     }
 
     public override void UpdateLogic()
@@ -49,15 +48,15 @@ public class CharacterMove : CharacterState
     {
         base.UpdatePhysics();
         _SinceLastJump += Time.fixedDeltaTime;
-        _IsGrounded = _SM.groundCheck.IsTriggered();
+        _IsGrounded = _MoveParameters.groundCheck.IsTriggered();
 
         if (_DoJump)
         {
             _DoJump = false;
-            if (_IsGrounded && _SinceLastJump > _SM.jumpDelay)
+            if (_IsGrounded && _SinceLastJump > _MoveParameters.jumpDelay)
             {
                 _SinceLastJump = 0.0f;
-                _SM.rigidbody2D.AddForce(new Vector2(0, _SM.jumpForce));
+                _SM.rigidbody2D.AddForce(new Vector2(0, _MoveParameters.jumpForce));
                 _SM.animator.SetTrigger("doJump");
             }
         }
@@ -66,28 +65,28 @@ public class CharacterMove : CharacterState
         {
             if (_IsCrouched != _SM.crouchButtonDown)
             {
-                _IsCrouched = _SM.crouchButtonDown || (!_SM.crouchButtonDown && _SM.ceilingCheck.IsTriggered());
+                _IsCrouched = _SM.crouchButtonDown || (!_SM.crouchButtonDown && _MoveParameters.ceilingCheck.IsTriggered());
                 if (_IsCrouched)
                 {
-                    _SM.crouchingCollider.enabled = true;
-                    _SM.standingCollider.enabled = false;
+                    _MoveParameters.crouchingCollider.enabled = true;
+                    _MoveParameters.standingCollider.enabled = false;
                 }
                 else
                 {
-                    _SM.standingCollider.enabled = true;
-                    _SM.crouchingCollider.enabled = false;
+                    _MoveParameters.standingCollider.enabled = true;
+                    _MoveParameters.crouchingCollider.enabled = false;
                 }
             }
             _IsRunning = _SM.runButtonDown;
             if (_IsCrouched)
-                movementSpeed = _SM.walkSpeed * _SM.crouchSpeed;
+                movementSpeed = _MoveParameters.walkSpeed * _MoveParameters.crouchSpeed;
             else if (_IsRunning)
-                movementSpeed = _SM.walkSpeed * _SM.runSpeed;
+                movementSpeed = _MoveParameters.walkSpeed * _MoveParameters.runSpeed;
             else
-                movementSpeed = _SM.walkSpeed;
+                movementSpeed = _MoveParameters.walkSpeed;
         }
         Vector3 targetVelocity = new Vector2(movementSpeed * 10f * _MoveDirection, _SM.rigidbody2D.velocity.y);
-        _SM.rigidbody2D.velocity = Vector3.SmoothDamp(_SM.rigidbody2D.velocity, targetVelocity, ref _Velocity, _SM.movementSmoothing);
+        _SM.rigidbody2D.velocity = Vector3.SmoothDamp(_SM.rigidbody2D.velocity, targetVelocity, ref _Velocity, _MoveParameters.movementSmoothing);
 
 
         if (_IsGrounded && !_WasGrounded)

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class JumpPad : MonoBehaviour
 {
-    [SerializeField]
+    [SerializeField, Tooltip("Force to apply to rigidbodies which land on the jump pad.")]
     private Vector2 _JumpForce = Vector2.zero;
 
     public void TriggerEntered(Collider2D other)

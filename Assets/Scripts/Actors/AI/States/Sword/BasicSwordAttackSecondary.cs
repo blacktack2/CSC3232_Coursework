@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BasicSwordAttackSecondary : BasicSwordAttack
@@ -16,6 +14,6 @@ public class BasicSwordAttackSecondary : BasicSwordAttack
 
     protected override Collider2D[] GetAttackColliders()
     {
-        return _SM.secondaryAttackColliders;
+        return _SecondaryParameters.secondaryAttackColliders;
     }
 }

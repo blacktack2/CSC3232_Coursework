@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+/// Middleman class for allowing events to be called by a given name
 public class EventMiddleman : MonoBehaviour
 {
     [Serializable]

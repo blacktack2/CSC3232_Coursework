@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class BasicEnemyPassive : BasicEnemyState
@@ -11,7 +9,7 @@ public abstract class BasicEnemyPassive : BasicEnemyState
     public override void UpdateLogic()
     {
         base.UpdateLogic();
-        if (Vector3.Distance(_SM.transform.position, _SM.target.transform.position) <= _SM.detectionRadius)
+        if (Vector3.Distance(_SM.transform.position, _SM.target.transform.position) <= _SM.stateParameters.detectionRadius)
             stateMachine.ChangeState(_SM.chaseState);
     }
 }

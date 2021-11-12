@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 // Code sourced from: https://medium.com/c-sharp-progarmming/make-a-basic-fsm-in-unity-c-f7d9db965134
 public abstract class BaseState

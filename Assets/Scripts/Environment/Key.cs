@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Key : MonoBehaviour
 {
-    [SerializeField]
+    [SerializeField, Tooltip("Door to open when collected.")]
     private Door _ToOpen;
 
     void OnTriggerEnter2D(Collider2D other)

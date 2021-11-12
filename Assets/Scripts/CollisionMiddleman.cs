@@ -3,20 +3,18 @@ using UnityEngine.Events;
 
 public class CollisionMiddleman : MonoBehaviour
 {
-    [SerializeField]
+    [SerializeField, Tooltip("Event to call when a collision occurs.")]
     private UnityEvent<Collision2D> _CollisionEvent;
-    [SerializeField]
+    [SerializeField, Tooltip("Event to call when a trigger overlap occurs.")]
     private UnityEvent<Collider2D> _TriggerEvent;
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        Debug.Log("Collision " + other.gameObject.name);
         _CollisionEvent.Invoke(other);
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("Trigger " + other.gameObject.name);
         _TriggerEvent.Invoke(other);
     }
 }

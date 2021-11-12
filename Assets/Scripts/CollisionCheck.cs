@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class CollisionCheck : MonoBehaviour
 {
-    [SerializeField][Tooltip("Layers of which objects should trigger this collision check.")]
+    [SerializeField, Tooltip("Layers of which objects should trigger this collision check.")]
     private LayerMask _WhatIsGround;
 
     public readonly List<Collider2D> triggerObjects = new List<Collider2D>();

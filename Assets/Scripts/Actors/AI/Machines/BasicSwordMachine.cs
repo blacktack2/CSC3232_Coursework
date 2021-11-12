@@ -1,36 +1,98 @@
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class BasicSwordMachine : StateMachine
 {
-    [SerializeField]
+    [SerializeField, Tooltip("Main animator for handling sprite changes.")]
     private Animator _Animator;
     public Animator animator {get {return _Animator;}}
 
-    [SerializeField]
-    private Collider2D _CollectableTrigger;
-    public Collider2D collectableTrigger {get {return _CollectableTrigger;}}
-    [SerializeField]
-    private Collider2D[] _PrimaryAttackColliders;
-    public Collider2D[] primaryAttackColliders {get {return _PrimaryAttackColliders;}}
-    [SerializeField]
-    private Collider2D[] _SecondaryAttackColliders;
-    public Collider2D[] secondaryAttackColliders {get {return _SecondaryAttackColliders;}}
+    [Serializable]
+    public class StateParameters
+    {
+        [Serializable]
+        public class Collectable
+        {
+            [SerializeField, Tooltip("Trigger to enable during the collectable state.")]
+            private Collider2D _CollectableTrigger;
+            public Collider2D collectableTrigger {get {return _CollectableTrigger;}}
+        }
+        [SerializeField]
+        private Collectable _Collectable;
+        public Collectable collectable {get {return _Collectable;}}
 
-    [SerializeField]
-    private float _HoverRange = 0.5f;
-    [SerializeField]
-    private float _FollowSpeed = 1.0f;
-    public float followSpeed {get {return _FollowSpeed;}}
-    [SerializeField]
-    private float _HoverSpeed = 1.0f;
-    public float hoverSpeed {get {return _HoverSpeed;}}
-    public float hoverRange {get {return _HoverRange;}}
+        [Serializable]
+        public class Idle
+        {
+            [Serializable]
+            public class Follow
+            {
+                [Header("Follow state data")]
+                [SerializeField, Tooltip("Speed to move whilst following the wielder.")]
+                private float _FollowSpeed = 1.0f;
+                public float followSpeed {get {return _FollowSpeed;}}
+            }
+            [SerializeField]
+            private Follow _Follow;
+            public Follow follow {get {return _Follow;}}
 
-    private SwordWielder _Wielder;
-    public SwordWielder wielder {get {return _Wielder;}}
+            [Serializable]
+            public class Hover
+            {
+                [Header("Hover state data")]
+                [SerializeField, Tooltip("Range from wielder to stop following and enter the hover state.")]
+                private float _HoverRange = 0.5f;
+                public float hoverRange {get {return _HoverRange;}}
+                [SerializeField, Tooltip("Speed to move whilst hovering.")]
+                private float _HoverSpeed = 1.0f;
+                public float hoverSpeed {get {return _HoverSpeed;}}
+            }
+            [SerializeField]
+            private Hover _Hover;
+            public Hover hover {get {return _Hover;}}
+        }
+        [SerializeField]
+        private Idle _Idle;
+        public Idle idle {get {return _Idle;}}
+
+        [Serializable]
+        public class Attack
+        {
+            [Serializable]
+            public class Primary
+            {
+                [SerializeField, Tooltip("Ordered colliders for the primary attack.")]
+                private Collider2D[] _PrimaryAttackColliders;
+                public Collider2D[] primaryAttackColliders {get {return _PrimaryAttackColliders;}}
+            }
+            [SerializeField]
+            private Primary _Primary;
+            public Primary primary {get {return _Primary;}}
+
+            [Serializable]
+            public class Secondary
+            {
+                [SerializeField, Tooltip("Ordered colliders for the secondary attack.")]
+                private Collider2D[] _SecondaryAttackColliders;
+                public Collider2D[] secondaryAttackColliders {get {return _SecondaryAttackColliders;}}
+            }
+            [SerializeField]
+            private Secondary _Secondary;
+            public Secondary secondary {get {return _Secondary;}}
+        }
+        [SerializeField]
+        private Attack _Attack;
+        public Attack attack {get {return _Attack;}}
+    }
+    [SerializeField]
+    private StateParameters _StateParameters;
+    public StateParameters stateParameters {get {return _StateParameters;}}
+
     private Rigidbody2D _Rigidbody2D;
     new public Rigidbody2D rigidbody2D {get {return _Rigidbody2D;}}
+    private SwordWielder _Wielder; // This must be set by the wielder calling the BasicSwordMachine.SetWielder method
+    public SwordWielder wielder {get {return _Wielder;}}
 
     public bool isFacingRight = true;
 
@@ -50,11 +112,13 @@ public class BasicSwordMachine : StateMachine
     protected override void Awake()
     {
         _Rigidbody2D = GetComponent<Rigidbody2D>();
+
         collectableState = new BasicSwordCollectable(this);
         idleFollowState = new BasicSwordIdleFollow(this);
         idleHoverState = new BasicSwordIdleHover(this);
         primaryAttackState = new BasicSwordAttackPrimary(this);
         secondaryAttackState = new BasicSwordAttackSecondary(this);
+
         base.Awake();
     }
 

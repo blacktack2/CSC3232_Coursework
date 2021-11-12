@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BasicSwordIdleHover : BasicSwordIdle
@@ -12,7 +10,7 @@ public class BasicSwordIdleHover : BasicSwordIdle
     public override void UpdateLogic()
     {
         base.UpdateLogic();
-        if (Vector2.Distance(_SM.wielder.transform.position, _SM.transform.position) > _SM.hoverRange)
+        if (Vector2.Distance(_SM.wielder.transform.position, _SM.transform.position) > _HoverParameters.hoverRange)
         {
             stateMachine.ChangeState(_SM.idleFollowState);
         }
@@ -21,9 +19,9 @@ public class BasicSwordIdleHover : BasicSwordIdle
     public override void UpdatePhysics()
     {
         base.UpdatePhysics();
-        _SM.rigidbody2D.velocity = _SM.hoverSpeed * (
+        _SM.rigidbody2D.velocity = _HoverParameters.hoverSpeed * (
                     _SM.wielder.transform.position - _SM.transform.position +
                      new Vector3(Mathf.PerlinNoise(Time.time, _HoverSeed), Mathf.PerlinNoise(_HoverSeed, Time.time), 0.0f)
-                      * _SM.hoverRange);
+                      * _HoverParameters.hoverRange);
     }
 }

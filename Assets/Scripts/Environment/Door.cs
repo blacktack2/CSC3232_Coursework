@@ -1,12 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Door : MonoBehaviour
 {
-    [SerializeField]
+    [SerializeField, Tooltip("Speed at which to open/close the door.")]
     private float _OpenSpeed = 1.0f;
-    [SerializeField]
+    [SerializeField, Tooltip("Set true to start the door in an open state.")]
     private bool _IsOpen = false;
     private bool _DoOpen = false;
     private bool _DoClose = false;
