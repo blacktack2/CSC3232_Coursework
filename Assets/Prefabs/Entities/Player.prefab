@@ -234,16 +234,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Animator: {fileID: 6514984213938056414}
-  _GroundCheck: {fileID: 6514984213786566959}
-  _CeilingCheck: {fileID: 6514984213766420658}
-  _StandingCollider: {fileID: 6514984212558959986}
-  _CrouchingCollider: {fileID: 6514984212260244640}
-  _WalkSpeed: 0.5
-  _RunSpeed: 1.8
-  _CrouchSpeed: 0.3
-  _JumpForce: 1200
-  _JumpDelay: 0.2
-  _MovementSmoothing: 0.05
+  _StateParameters:
+    _Move:
+      _GroundCheck: {fileID: 6514984213786566959}
+      _CeilingCheck: {fileID: 6514984213766420658}
+      _StandingCollider: {fileID: 6514984212558959986}
+      _CrouchingCollider: {fileID: 6514984212260244640}
+      _WalkSpeed: 0.5
+      _RunSpeed: 1.8
+      _CrouchSpeed: 0.3
+      _JumpForce: 1200
+      _JumpDelay: 0.2
+      _MovementSmoothing: 0.05
 --- !u!114 &6514984212911396524
 MonoBehaviour:
   m_ObjectHideFlags: 0

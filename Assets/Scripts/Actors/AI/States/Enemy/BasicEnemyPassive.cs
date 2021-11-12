@@ -5,6 +5,12 @@ public abstract class BasicEnemyPassive : BasicEnemyState
     public BasicEnemyPassive(string name, BasicEnemyMachine stateMachine) : base(name, stateMachine)
     {
     }
+    
+    public override void Enter()
+    {
+        base.Enter();
+        _SM.animator.SetTrigger("doPassive");
+    }
 
     public override void UpdateLogic()
     {

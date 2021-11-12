@@ -34,7 +34,7 @@ public class BasicEnemyPatrol : BasicEnemyPassive
     public override void UpdatePhysics()
     {
         base.UpdatePhysics();
-        _SM.transform.position = Vector3.MoveTowards(_SM.transform.position, _PatrolParameters.patrolPoints[_PatrolIndex], Time.fixedDeltaTime * _PatrolParameters.patrolSpeed);
+        _SM.rigidbody2D.MovePosition(Vector3.MoveTowards(_SM.transform.position, _PatrolParameters.patrolPoints[_PatrolIndex], Time.fixedDeltaTime * _PatrolParameters.patrolSpeed));
         if (Vector3.Distance(_SM.transform.position, _PatrolParameters.patrolPoints[_PatrolIndex]) < 0.05)
             SetPatrolIndex(_PatrolIndex + _PatrolDirection);
     }

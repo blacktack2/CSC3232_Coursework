@@ -6,6 +6,12 @@ public class BasicEnemyChase : BasicEnemyAggressive
     {
     }
 
+    public override void Enter()
+    {
+        base.Enter();
+        _SM.animator.SetTrigger("doChase");
+    }
+
     public override void UpdateLogic()
     {
         base.UpdateLogic();

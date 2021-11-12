@@ -19,6 +19,8 @@ public class BasicEnemyLunge : BasicEnemyAggressive
         _LungeCooldown = 0.0f;
         _SM.rigidbody2D.velocity = Vector3.zero;
         _DoLunge = true;
+
+        _SM.animator.SetTrigger("doChargeup");
     }
 
     public override void UpdatePhysics()
@@ -31,6 +33,7 @@ public class BasicEnemyLunge : BasicEnemyAggressive
             {
                 _DoLunge = false;
                 _SM.rigidbody2D.AddForce(_LungeForce);
+                _SM.animator.SetTrigger("doLunge");
             }
             else
             {
