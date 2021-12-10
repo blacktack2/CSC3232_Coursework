@@ -7,9 +7,13 @@ public class FragileObject : MonoBehaviour
     [SerializeField, Tooltip("True if this object should be destroyed when receiving a force greater than the breaking force.")]
     private bool _IsFragile = true;
 
-    public void ForceApplied(float magnitude)
+    public bool ForceApplied(float magnitude)
     {
         if (_IsFragile && magnitude >= _BreakingForce)
+        {
             Destroy(gameObject);
+            return true;
+        }
+        return false;
     }
 }

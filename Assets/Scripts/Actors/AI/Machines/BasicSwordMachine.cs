@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Rigidbody2D), typeof(AudioSource))]
 public class BasicSwordMachine : StateMachine
 {
     [SerializeField, Tooltip("Main animator for handling sprite changes.")]
@@ -89,10 +89,22 @@ public class BasicSwordMachine : StateMachine
     private StateParameters _StateParameters;
     public StateParameters stateParameters {get {return _StateParameters;}}
 
+    [Serializable]
+    public struct Sounds
+    {
+        public AudioClip primarySwing;
+        public AudioClip secondarySwing;
+    }
+    [SerializeField]
+    private Sounds _Sounds;
+    public Sounds sounds {get {return _Sounds;}}
+
     private Rigidbody2D _Rigidbody2D;
     new public Rigidbody2D rigidbody2D {get {return _Rigidbody2D;}}
     private SwordWielder _Wielder; // This must be set by the wielder calling the BasicSwordMachine.SetWielder method
     public SwordWielder wielder {get {return _Wielder;}}
+    private AudioSource _AudioSource;
+    public AudioSource audioSource {get {return _AudioSource;}}
 
     public bool isFacingRight = true;
 
@@ -112,6 +124,7 @@ public class BasicSwordMachine : StateMachine
     protected override void Awake()
     {
         _Rigidbody2D = GetComponent<Rigidbody2D>();
+        _AudioSource = GetComponent<AudioSource>();
 
         collectableState = new BasicSwordCollectable(this);
         idleFollowState = new BasicSwordIdleFollow(this);

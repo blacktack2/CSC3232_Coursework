@@ -58,6 +58,7 @@ public class CharacterMove : CharacterState
                 _SinceLastJump = 0.0f;
                 _SM.rigidbody2D.AddForce(new Vector2(0, _MoveParameters.jumpForce));
                 _SM.animator.SetTrigger("doJump");
+                _SM.audioSource.PlayOneShot(_SM.audioClipParameters.jump);
             }
         }
 
@@ -90,7 +91,10 @@ public class CharacterMove : CharacterState
 
 
         if (_IsGrounded && !_WasGrounded)
+        {
             _SM.animator.SetTrigger("doLand");
+            _SM.audioSource.PlayOneShot(_SM.audioClipParameters.land);
+        }
         _WasGrounded = _IsGrounded;
     }
 

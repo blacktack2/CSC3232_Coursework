@@ -1,12 +1,22 @@
 using System;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Rigidbody2D), typeof(AudioSource))]
 public class CharacterMachine : StateMachine
 {
     [SerializeField, Tooltip("Main animator for handling sprite changes.")]
     private Animator _Animator;
     public Animator animator {get {return _Animator;}}
+
+    [Serializable]
+    public struct AudioClipParameters
+    {
+        public AudioClip jump;
+        public AudioClip land;
+    }
+    [SerializeField]
+    private AudioClipParameters _AudioClipParameters;
+    public AudioClipParameters audioClipParameters {get {return _AudioClipParameters;}}
 
     [Serializable]
     public class StateParameters
@@ -57,6 +67,8 @@ public class CharacterMachine : StateMachine
 
     private Rigidbody2D _Rigidbody2D;
     new public Rigidbody2D rigidbody2D {get {return _Rigidbody2D;}}
+    private AudioSource _AudioSource;
+    public AudioSource audioSource {get {return _AudioSource;}}
 
     private Vector3 _InitialScale; // Used for flipping the player horizontally (scale is not expected to change in size)
     public Vector3 initialScale {get {return _InitialScale;}}
@@ -72,6 +84,7 @@ public class CharacterMachine : StateMachine
     protected override void Awake()
     {
         _Rigidbody2D = GetComponent<Rigidbody2D>();
+        _AudioSource = GetComponent<AudioSource>();
         _MoveState = new CharacterMove(this);
 
         _InitialScale = transform.localScale;

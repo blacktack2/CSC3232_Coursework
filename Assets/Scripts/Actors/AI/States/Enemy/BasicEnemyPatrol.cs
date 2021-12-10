@@ -5,9 +5,7 @@ public class BasicEnemyPatrol : BasicEnemyPassive
     private int _PatrolIndex = 0;
     private int _PatrolDirection = 1;
 
-    private float _MoveTime = 0.0f;
     private Vector3 lastPosition;
-    private float currentVelocity = 1.0f;
 
     public BasicEnemyPatrol(BasicEnemyMachine stateMachine) : base("Patrol", stateMachine)
     {
@@ -69,7 +67,6 @@ public class BasicEnemyPatrol : BasicEnemyPassive
             if (index < 0)
                 _PatrolDirection = 1;
         }
-        _MoveTime = 0.0f;
         lastPosition = _SM.transform.position;
     }
 }

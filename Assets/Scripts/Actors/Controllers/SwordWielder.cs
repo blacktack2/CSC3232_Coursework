@@ -80,7 +80,6 @@ public class SwordWielder : MonoBehaviour
 
     public void AddSword(BasicSwordMachine sword)
     {
-        Debug.Log("AddSword");
         for (int i = 0; i < _OwnedSwords.Count; i++)
         {
             if (_OwnedSwords[i] == null)

@@ -10,6 +10,7 @@ public class BasicSwordAttackPrimary : BasicSwordAttack
     {
         base.Enter();
         _SM.animator.SetTrigger("EnterPrimaryAttackState");
+        _SM.audioSource.PlayOneShot(_SM.sounds.primarySwing);
     }
 
     protected override Collider2D[] GetAttackColliders()
