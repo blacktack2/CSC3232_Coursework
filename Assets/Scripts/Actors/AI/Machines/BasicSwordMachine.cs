@@ -28,7 +28,6 @@ public class BasicSwordMachine : StateMachine
             [Serializable]
             public class Follow
             {
-                [Header("Follow state data")]
                 [SerializeField, Tooltip("Speed to move whilst following the wielder.")]
                 private float _FollowSpeed = 1.0f;
                 public float followSpeed {get {return _FollowSpeed;}}
@@ -40,7 +39,6 @@ public class BasicSwordMachine : StateMachine
             [Serializable]
             public class Hover
             {
-                [Header("Hover state data")]
                 [SerializeField, Tooltip("Range from wielder to stop following and enter the hover state.")]
                 private float _HoverRange = 0.5f;
                 public float hoverRange {get {return _HoverRange;}}
@@ -65,6 +63,10 @@ public class BasicSwordMachine : StateMachine
                 [SerializeField, Tooltip("Ordered colliders for the primary attack.")]
                 private Collider2D[] _PrimaryAttackColliders;
                 public Collider2D[] primaryAttackColliders {get {return _PrimaryAttackColliders;}}
+                
+                [SerializeField]
+                private ParticleGenerator _PrimaryAttackParticles;
+                public ParticleGenerator primaryAttackParticles {get {return _PrimaryAttackParticles;}}
             }
             [SerializeField]
             private Primary _Primary;
@@ -76,6 +78,10 @@ public class BasicSwordMachine : StateMachine
                 [SerializeField, Tooltip("Ordered colliders for the secondary attack.")]
                 private Collider2D[] _SecondaryAttackColliders;
                 public Collider2D[] secondaryAttackColliders {get {return _SecondaryAttackColliders;}}
+                
+                [SerializeField]
+                private ParticleGenerator _SecondaryAttackParticles;
+                public ParticleGenerator secondaryAttackParticles {get {return _SecondaryAttackParticles;}}
             }
             [SerializeField]
             private Secondary _Secondary;

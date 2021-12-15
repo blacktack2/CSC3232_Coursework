@@ -9,16 +9,6 @@ public class CharacterMachine : StateMachine
     public Animator animator {get {return _Animator;}}
 
     [Serializable]
-    public struct AudioClipParameters
-    {
-        public AudioClip jump;
-        public AudioClip land;
-    }
-    [SerializeField]
-    private AudioClipParameters _AudioClipParameters;
-    public AudioClipParameters audioClipParameters {get {return _AudioClipParameters;}}
-
-    [Serializable]
     public class StateParameters
     {
         [Serializable]
@@ -56,6 +46,17 @@ public class CharacterMachine : StateMachine
             [SerializeField, Tooltip("Degree to which the horizontal character motion should be smoothed.")]
             private float _MovementSmoothing;
             public float movementSmoothing {get {return _MovementSmoothing;}}
+            
+            [SerializeField]
+            private AudioClip _JumpSound;
+            public AudioClip jumpSound {get {return _JumpSound;}}
+            [SerializeField]
+            private AudioClip _LandSound;
+            public AudioClip landSound {get {return _LandSound;}}
+
+            [SerializeField]
+            private ParticleGenerator[] _LandParticles;
+            public ParticleGenerator[] landParticles {get {return _LandParticles;}}
         }
         [SerializeField]
         private Move _Move;
