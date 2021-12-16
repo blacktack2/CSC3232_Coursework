@@ -94,7 +94,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 1
+  m_LinearDrag: 2
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 6200000, guid: 879f10f5cd1d6bc4ea6a2c2879661a31, type: 2}
@@ -116,25 +116,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Animator: {fileID: 3334859590641334397}
   _Target: {fileID: 0}
+  _CanSee:
+    serializedVersion: 2
+    m_Bits: 2240
   _StateParameters:
-    _DetectionRadius: 7
+    _DetectionRadius: 8
+    _WaypointThreshold: 0.3
     _Passive:
       _Patrol:
         patrolPoints:
-        - {x: 29, y: -3, z: 0}
-        - {x: 25, y: -3, z: 0}
-        - {x: 27, y: 0, z: 0}
-        _PatrolSpeed: 1.5
+        - {x: 34.29613, y: -2.5474334, z: 0}
+        - {x: 50.615288, y: -2.6832032, z: 0}
+        - {x: 60.716236, y: -2.5343745, z: 0}
+        - {x: 50.805023, y: 1.4029574, z: 0}
+        - {x: 47.229744, y: 5.295033, z: 0}
+        - {x: 34.512615, y: 10.363783, z: 0}
+        _PatrolSpeed: 200
         _PatrolEndProtocol: 1
         _PatrolReturnProtocol: 3
     _Aggressive:
+      _Search:
+        _SearchSpeed: 300
+        _SearchDuration: 15
+        _SearchRadius: 10
       _Chase:
-        _ChaseSpeed: 2.5
-      _Lunge:
-        _LungeRadius: 4
-        _LungeWindupTime: 1
-        _LungeCooldownTime: 1
-        _LungeForce: 500
+        _ChaseSpeed: 500
+  lastKnownTargetPosition: {x: 0, y: 0}
 --- !u!1 &3334859590641334386
 GameObject:
   m_ObjectHideFlags: 0

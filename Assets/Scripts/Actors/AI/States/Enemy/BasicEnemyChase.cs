@@ -15,16 +15,20 @@ public class BasicEnemyChase : BasicEnemyAggressive
     public override void UpdateLogic()
     {
         base.UpdateLogic();
-        float distance = Vector3.Distance(_SM.transform.position, _SM.target.transform.position);
-        if (distance < _AggressiveParameters.lunge.lungeRadius)
-            stateMachine.ChangeState(_SM.lungeState);
-        else if (distance > _SM.stateParameters.detectionRadius)
-            stateMachine.ChangeState(_SM.patrolState);
+        if (CanSeeTarget())
+            _SM.lastKnownTargetPosition = _SM.target.transform.position;
+        else
+            _SM.ChangeState(_SM.searchState);
     }
 
     public override void UpdatePhysics()
     {
         base.UpdatePhysics();
-        _SM.rigidbody2D.velocity = (_SM.target.transform.position - _SM.transform.position).normalized * _ChaseParameters.chaseSpeed;
+        PathFind(_ChaseParameters.chaseSpeed);
+    }
+
+    public override void UpdatePath()
+    {
+        _SM.seeker.StartPath(_SM.rigidbody2D.position, _SM.target.transform.position, OnPathComplete);
     }
 }

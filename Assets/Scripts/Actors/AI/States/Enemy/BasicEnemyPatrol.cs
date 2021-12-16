@@ -32,8 +32,8 @@ public class BasicEnemyPatrol : BasicEnemyPassive
     public override void UpdatePhysics()
     {
         base.UpdatePhysics();
-        _SM.rigidbody2D.MovePosition(Vector3.MoveTowards(_SM.transform.position, _PatrolParameters.patrolPoints[_PatrolIndex], Time.fixedDeltaTime * _PatrolParameters.patrolSpeed));
-        if (Vector3.Distance(_SM.transform.position, _PatrolParameters.patrolPoints[_PatrolIndex]) < 0.05)
+        PathFind(_PatrolParameters.patrolSpeed);
+        if (!(_Path != null && _PathSet && _CurrentWaypoint < _Path.vectorPath.Count))
             SetPatrolIndex(_PatrolIndex + _PatrolDirection);
     }
 
@@ -44,6 +44,7 @@ public class BasicEnemyPatrol : BasicEnemyPassive
 
     private void SetPatrolIndex(int index)
     {
+        _PathSet = false;
         if (index > _PatrolParameters.patrolPoints.Length - 1)
         {
             switch (_PatrolParameters.patrolEndProtocol)
@@ -68,5 +69,10 @@ public class BasicEnemyPatrol : BasicEnemyPassive
                 _PatrolDirection = 1;
         }
         lastPosition = _SM.transform.position;
+    }
+
+    public override void UpdatePath()
+    {
+        _SM.seeker.StartPath(_SM.rigidbody2D.position, _PatrolParameters.patrolPoints[_PatrolIndex], OnPathComplete);
     }
 }

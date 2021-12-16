@@ -1,6 +1,8 @@
 using System;
 using UnityEngine;
 
+using Pathfinding;
+
 public enum PatrolEndProtocol
 {
     Stop,
@@ -16,7 +18,7 @@ public enum PatrolReturnProtocol
 }
 
 /// Main behaviour handler for the Basic Enemy
-[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Rigidbody2D), typeof(Seeker))]
 public class BasicEnemyMachine : StateMachine
 {
     [SerializeField, Tooltip("Main animator for handling sprite changes.")]
@@ -26,12 +28,20 @@ public class BasicEnemyMachine : StateMachine
     private GameObject _Target;
     public GameObject target {get {return _Target;}}
 
+    [SerializeField]
+    private LayerMask _CanSee;
+    public LayerMask canSee {get {return _CanSee;}}
+
     [Serializable]
     public class StateParameters
     {
         [SerializeField, Tooltip("Distance from which this machine can see the target.")]
         private float _DetectionRadius = 5.0f;
         public float detectionRadius {get {return _DetectionRadius;}}
+
+        [SerializeField, Tooltip("Distance from a waypoint at which it should be considered reached")]
+        private float _WaypointThreshold;
+        public float waypointThreshold {get {return _WaypointThreshold;}}
 
         [Serializable]
         public class Passive
@@ -82,35 +92,32 @@ public class BasicEnemyMachine : StateMachine
         public class Aggressive
         {
             [Serializable]
+            public class Search
+            {
+                [SerializeField, Tooltip("Speed to move whilst searching.")]
+                private float _SearchSpeed = 1.5f;
+                public float searchSpeed {get {return _SearchSpeed;}}
+                [SerializeField, Tooltip("Time (in seconds) to spend searching before returning to passive state.")]
+                private float _SearchDuration = 5.0f;
+                public float searchDuration {get {return _SearchDuration;}}
+                [SerializeField, Tooltip("Radius from the last known player position to search within.")]
+                private float _SearchRadius = 10.0f;
+                public float searchRadius {get {return _SearchRadius;}}
+            }
+            [SerializeField]
+            private Search _Search;
+            public Search search {get {return _Search;}}
+
+            [Serializable]
             public class Chase
             {
-                [SerializeField, Tooltip("Speed to move whilst chasing.")]
-                private float _ChaseSpeed = 1.5f;
+                [SerializeField, Tooltip("Speed to move whilst charging.")]
+                private float _ChaseSpeed = 2.0f;
                 public float chaseSpeed {get {return _ChaseSpeed;}}
             }
             [SerializeField]
             private Chase _Chase;
             public Chase chase {get {return _Chase;}}
-
-            [Serializable]
-            public class Lunge
-            {
-                [SerializeField, Tooltip("Distance from which this machine will lunge at the target.")]
-                private float _LungeRadius = 3.0f;
-                public float lungeRadius {get {return _LungeRadius;}}
-                [SerializeField, Tooltip("Time taken for this machine to windup before a lunge.")]
-                private float _LungeWindupTime = 1.0f;
-                public float lungeWindupTime {get {return _LungeWindupTime;}}
-                [SerializeField, Tooltip("Time taken for this machine to recover after a lunge.")]
-                private float _LungeCooldownTime = 1.0f;
-                public float lungeCooldownTime {get {return _LungeCooldownTime;}}
-                [SerializeField, Tooltip("Magnitude of the force to apply to the rigidbody when lunging.")]
-                private float _LungeForce = 2.0f;
-                public float lungeForce {get {return _LungeForce;}}
-            }
-            [SerializeField]
-            private Lunge _Lunge;
-            public Lunge lunge {get {return _Lunge;}}
         }
         [SerializeField]
         private Aggressive _Aggressive;
@@ -123,6 +130,10 @@ public class BasicEnemyMachine : StateMachine
 
     private Rigidbody2D _Rigidbody2D;
     new public Rigidbody2D rigidbody2D {get {return _Rigidbody2D;}}
+    private Seeker _Seeker;
+    public Seeker seeker {get {return _Seeker;}}
+
+    public Vector2 lastKnownTargetPosition;
 
     private BasicEnemyPassive[] _PassiveStates = new BasicEnemyPassive[2];
     [HideInInspector]
@@ -131,24 +142,31 @@ public class BasicEnemyMachine : StateMachine
     public BasicEnemyStopped stoppedState {get {return (BasicEnemyStopped) _PassiveStates[1];} set {_PassiveStates[1] = value;}}
     private BasicEnemyAggressive[] _AggressiveStates = new BasicEnemyAggressive[2];
     [HideInInspector]
-    public BasicEnemyChase chaseState {get {return (BasicEnemyChase) _AggressiveStates[0];} set {_AggressiveStates[0] = value;}}
+    public BasicEnemySearch searchState {get {return (BasicEnemySearch) _AggressiveStates[0];} set {_AggressiveStates[0] = value;}}
     [HideInInspector]
-    public BasicEnemyLunge lungeState {get {return (BasicEnemyLunge) _AggressiveStates[1];} set {_AggressiveStates[1] = value;}}
+    public BasicEnemyChase chaseState {get {return (BasicEnemyChase) _AggressiveStates[1];} set {_AggressiveStates[1] = value;}}
 
     protected override void Awake()
     {
         _Rigidbody2D = GetComponent<Rigidbody2D>();
+        _Seeker = GetComponent<Seeker>();
 
         patrolState = new BasicEnemyPatrol(this);
         stoppedState = new BasicEnemyStopped(this);
+        searchState = new BasicEnemySearch(this);
         chaseState = new BasicEnemyChase(this);
-        lungeState = new BasicEnemyLunge(this);
 
         base.Awake();
+        InvokeRepeating("UpdatePath", 0f, 0.5f);
     }
 
     protected override BaseState GetInitialState()
     {
         return patrolState;
+    }
+
+    private void UpdatePath()
+    {
+        ((BasicEnemyState) currentState).UpdatePath();
     }
 }
