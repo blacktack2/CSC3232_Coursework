@@ -69,7 +69,8 @@ public class ForceReceiver : MonoBehaviour
     {
         if (_IsFragile && magnitude >= _BreakingForce)
         {
-            _AudioSource.PlayOneShot(_Sounds.destroy);
+            if (_Sounds.destroy != null)
+                _AudioSource.PlayOneShot(_Sounds.destroy);
             Destroy(gameObject);
             return;
         }
@@ -78,7 +79,7 @@ public class ForceReceiver : MonoBehaviour
         {
             _IsStatic = false;
             _Rigidbody2D.isKinematic = false;
-            if (_HitSoundTime >= _HitSoundDelay)
+            if (_Sounds.hit != null && _HitSoundTime >= _HitSoundDelay)
             {
                 _HitSoundTime = 0.0f;
                 _AudioSource.PlayOneShot(_Sounds.hit);

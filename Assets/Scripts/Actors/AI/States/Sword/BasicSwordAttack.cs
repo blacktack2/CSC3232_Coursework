@@ -48,11 +48,15 @@ public abstract class BasicSwordAttack : BasicSwordState
 
     public void AttackTriggered(Collider2D other, AttackTrigger trigger)
     {
-        ForceReceiver otherForceReceiver = other.GetComponent<ForceReceiver>();
-        if (otherForceReceiver != null)
+        Rigidbody2D otherRigidbody = other.attachedRigidbody;
+        if (otherRigidbody != null)
         {
-            Vector2 attackForce = new Vector2(trigger.attackForce.x * (_SM.isFacingRight ? 1 : -1), trigger.attackForce.y);
-            otherForceReceiver.ApplyForce(attackForce);
+            ForceReceiver otherForceReceiver = otherRigidbody.GetComponent<ForceReceiver>();
+            if (otherForceReceiver != null)
+            {
+                Vector2 attackForce = new Vector2(trigger.attackForce.x * (_SM.isFacingRight ? 1 : -1), trigger.attackForce.y);
+                otherForceReceiver.ApplyForce(attackForce);
+            }
         }
     }
 
